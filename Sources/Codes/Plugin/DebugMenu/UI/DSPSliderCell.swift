@@ -1,0 +1,80 @@
+import UIKit
+
+class DSPSliderCell: UICollectionViewListCell {
+    var title: String!
+    var current: (() -> Double)!
+    var valueLabelText: ((Double) -> String)!
+    var range: ClosedRange<Double>!
+    var onChange: ((Double) -> Void)!
+
+    override func updateConfiguration(using state: UICellConfigurationState) {
+        let configuration = DSPSliderCellConfiguration(
+            title: title,
+            current: current,
+            valueLabelText: valueLabelText,
+            range: range,
+            onChange: onChange
+        )
+        contentConfiguration = configuration
+    }
+}
+
+struct DSPSliderCellConfiguration: UIContentConfiguration {
+    let title: String
+    let current: () -> Double
+    let valueLabelText: (Double) -> String
+    let range: ClosedRange<Double>
+    let onChange: (Double) -> Void
+
+    func makeContentView() -> any UIView & UIContentView {
+        DSPSliderCellView(configuration: self)
+    }
+
+    func updated(for state: any UIConfigurationState) -> Self { self }
+}
+
+class DSPSliderCellView: UIView, UIContentView {
+    var configuration: any UIContentConfiguration
+
+    init(configuration: DSPSliderCellConfiguration) {
+        self.configuration = configuration
+        super.init(frame: .null)
+
+        let titleLabel = UILabel(frame: .null)
+        titleLabel.text = configuration.title
+        let valueLabel = UILabel(frame: .null)
+
+        let slider = UISlider(
+            frame: .null,
+            primaryAction: UIAction(handler: { (action) in
+                if let slider = action.sender as? UISlider {
+                    valueLabel.text = configuration.valueLabelText(Double(slider.value))
+                    configuration.onChange(Double(slider.value))
+                }
+            })
+        )
+        slider.maximumValue = Float(configuration.range.upperBound)
+        slider.minimumValue = Float(configuration.range.lowerBound)
+        slider.setValue(Float(configuration.current()), animated: false)
+        valueLabel.text = configuration.valueLabelText(Double(slider.value))
+
+        let hStack = UIStackView(arrangedSubviews: [titleLabel, valueLabel])
+        hStack.axis = .horizontal
+
+        let vStack = UIStackView(arrangedSubviews: [hStack, slider])
+        vStack.axis = .vertical
+        vStack.spacing = 6
+        vStack.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(vStack)
+        NSLayoutConstraint.activate([
+            vStack.topAnchor.constraint(equalTo: topAnchor, constant: 8),
+            vStack.rightAnchor.constraint(equalTo: rightAnchor, constant: -16),
+            vStack.leftAnchor.constraint(equalTo: leftAnchor, constant: 16),
+            vStack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
+        ])
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}

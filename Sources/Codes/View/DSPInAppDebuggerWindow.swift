@@ -7,6 +7,14 @@ protocol DSPTouchThrowing {}
 public class DSPInAppDebuggerWindow: UIWindow {
     internal static var windows: [DSPInAppDebuggerWindow] = []
 
+    internal static var isWidgetVisible: Bool {
+        activeController?.isWidgetVisible ?? false
+    }
+
+    internal static func setWidgetVisible(_ isVisible: Bool) {
+        activeController?.setWidgetVisible(isVisible)
+    }
+
     internal static func install(
         windowScene: UIWindowScene? = nil,
         debuggerItems: [any DSPDebugItem],
@@ -51,6 +59,13 @@ public class DSPInAppDebuggerWindow: UIWindow {
         }
 
         return windows.first
+    }
+
+    private static var activeController: DSPFloatingVC? {
+        windows
+            .first(where: { !$0.isHidden })?
+            .rootViewController as? DSPFloatingVC
+            ?? windows.first?.rootViewController as? DSPFloatingVC
     }
 
     private func apply(

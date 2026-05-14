@@ -47,6 +47,10 @@ internal class DSPFloatingVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        widgetView.onRequestClose = { [weak self] in
+            self?.setWidgetVisible(false)
+        }
+
         bug: do {
             let gesture = DSPFloatingItemGestureRecognizer(groundView: self.view)
             launchView.addGestureRecognizer(gesture)
@@ -117,18 +121,26 @@ internal class DSPFloatingVC: UIViewController {
         applyWidgetVisibility(isInitial: false)
     }
 
+    var isWidgetVisible: Bool {
+        !widgetView.isHidden
+    }
+
+    func setWidgetVisible(_ isVisible: Bool) {
+        if isVisible {
+            widgetView.show()
+        } else {
+            widgetView.hide()
+        }
+    }
+
     private func applyWidgetVisibility(isInitial: Bool) {
         guard let widgetConfiguration, widgetConfiguration.isEnabled else {
-            widgetView.hide()
+            setWidgetVisible(false)
             return
         }
 
         if let isVisible = widgetConfiguration.isVisible {
-            if isVisible {
-                widgetView.show()
-            } else {
-                widgetView.hide()
-            }
+            setWidgetVisible(isVisible)
             return
         }
 
@@ -136,11 +148,7 @@ internal class DSPFloatingVC: UIViewController {
             return
         }
 
-        if widgetConfiguration.showsOnLaunch {
-            widgetView.show()
-        } else {
-            widgetView.hide()
-        }
+        setWidgetVisible(widgetConfiguration.showsOnLaunch)
     }
 
     private func presentMenu() {
@@ -151,7 +159,7 @@ internal class DSPFloatingVC: UIViewController {
                 style: .destructive,
                 handler: { [weak self] _ in
                     self?.launchView.isHidden = true
-                    self?.widgetView.hide()
+                    self?.setWidgetVisible(false)
                 }
             )
         )
@@ -167,7 +175,7 @@ internal class DSPFloatingVC: UIViewController {
                     title: .showWidget,
                     style: .default,
                     handler: { [weak self] _ in
-                        self?.widgetView.show()
+                        self?.setWidgetVisible(true)
                     }
                 )
             )
@@ -177,7 +185,7 @@ internal class DSPFloatingVC: UIViewController {
                     title: .hideWidget,
                     style: .destructive,
                     handler: { [weak self] _ in
-                        self?.widgetView.hide()
+                        self?.setWidgetVisible(false)
                     }
                 )
             )

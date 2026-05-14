@@ -4,6 +4,11 @@ import SwiftUI
 public struct DebugSP: @unchecked Sendable {
 
     @MainActor
+    public static var isWidgetVisible: Bool {
+        DSPInAppDebuggerWindow.isWidgetVisible
+    }
+
+    @MainActor
     public static func install(
         windowScene: UIWindowScene? = nil,
         items: [any DSPDebugItem] = [],
@@ -15,5 +20,10 @@ public struct DebugSP: @unchecked Sendable {
             dashboardItems: dashboardItems,
             options: options,
         )
+    }
+
+    @MainActor
+    public static func setWidgetVisible(_ isVisible: Bool) {
+        DSPInAppDebuggerWindow.setWidgetVisible(isVisible)
     }
 }

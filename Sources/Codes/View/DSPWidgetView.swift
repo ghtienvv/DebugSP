@@ -4,6 +4,7 @@ import UIKit
 class DSPWidgetView: UIVisualEffectView {
     private let defaultEffect = UIBlurEffect(style: .systemMaterialDark)
     private let headerView: UIView = .init(frame: .null)
+    private let closeButton: UIButton = .init(type: .system)
     private let expandCollapseButton: UIButton = .init(type: .system)
     private let tableView: UITableView = .init(frame: .null, style: .plain)
     private var cancellables: Set<AnyCancellable> = []
@@ -14,6 +15,7 @@ class DSPWidgetView: UIVisualEffectView {
     private let headerHeight: CGFloat = 36
     private let widgetMargin: CGFloat = 16
     private let tableBottomPadding: CGFloat = 20
+    var onRequestClose: (() -> Void)?
 
     init(dashboardItems: [any DSPDashboardItem], configuration: DSPOptions.Widget?) {
         self.dashboardItems = dashboardItems
@@ -35,6 +37,24 @@ class DSPWidgetView: UIVisualEffectView {
         headerView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             headerView.heightAnchor.constraint(equalToConstant: headerHeight)
+        ])
+
+        closeButton.translatesAutoresizingMaskIntoConstraints = false
+        closeButton.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
+        closeButton.tintColor = .white
+        
+        closeButton.addAction(
+            .init(handler: { [weak self] _ in
+                self?.onRequestClose?()
+            }),
+            for: .touchUpInside
+        )
+        headerView.addSubview(closeButton)
+        NSLayoutConstraint.activate([
+            closeButton.centerYAnchor.constraint(equalTo: headerView.centerYAnchor),
+            closeButton.leftAnchor.constraint(equalTo: headerView.leftAnchor, constant: 8),
+            closeButton.widthAnchor.constraint(equalToConstant: 18),
+            closeButton.heightAnchor.constraint(equalToConstant: 18),
         ])
 
         expandCollapseButton.translatesAutoresizingMaskIntoConstraints = false
@@ -177,7 +197,12 @@ class DSPWidgetView: UIVisualEffectView {
         }
 
         let pointInButton = touch.location(in: expandCollapseButton)
-        return !expandCollapseButton.bounds.contains(pointInButton)
+        if expandCollapseButton.bounds.contains(pointInButton) {
+            return false
+        }
+
+        let pointInCloseButton = touch.location(in: closeButton)
+        return !closeButton.bounds.contains(pointInCloseButton)
     }
 
     private func updateExpandCollapseButtonImage(for expanded: Bool? = nil) {

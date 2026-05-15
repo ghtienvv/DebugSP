@@ -16,6 +16,7 @@ It combines a Swift-first integration layer with an Objective-C runtime inspecti
 - [Installation](#installation)
 - [Usage](#usage)
 - [Built-in Features](#built-in-features)
+- [Feature Deep Dives](#feature-deep-dives)
 - [Customization](#customization)
 - [How to Open DebugSP](#how-to-open-debugsp)
 - [License](#license)
@@ -154,6 +155,8 @@ Use Snapshot when you want to:
 - reason about spacing and composition visually
 - debug complex container layouts
 
+Read more: [Snapshot Deep Dive](docs/snapshot.md)
+
 ### Hierarchy
 
 Hierarchy view focuses on structural understanding.
@@ -166,6 +169,8 @@ Use Hierarchy when you want to:
 - identify the selected view and its ancestors
 - debug container composition
 - understand why a view is clipped, misplaced, or unexpectedly nested
+
+Read more: [Hierarchy Deep Dive](docs/hierarchy.md)
 
 ### UI Debug
 
@@ -248,6 +253,11 @@ Typical metrics include:
 
 This makes it easier to observe performance trends without opening external tools.
 
+## Feature Deep Dives
+
+- [Hierarchy](docs/hierarchy.md)
+- [Snapshot](docs/snapshot.md)
+
 ## Customization
 
 DebugSP supports custom debug items and custom dashboard items.
@@ -306,25 +316,7 @@ Long press the floating bug button to access widget-related actions.
 
 ## License
 
-<details>
-<summary>MIT License</summary>
+DebugSP is released under the MIT License.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
-</details>
+- Markdown version: [LICENSE.md](LICENSE.md)
+- GitHub license tab source: [LICENSE](LICENSE)

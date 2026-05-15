@@ -20,8 +20,8 @@ Pods/
 .DS_Store
 
 # References
-DebugSwift-main/
-FWDebug-master/
+Debug_ref1/
+Debug_ref2/
 
 # Sample
 Sample/

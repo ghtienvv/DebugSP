@@ -24,7 +24,7 @@ let package = Package(
         .target(
             name: "DebugSPObjC",
             dependencies: [],
-            path: "Sources/ObjC",
+            path: "Sources/ObjC/UIDebugs",
             publicHeadersPath: "Root",
             cSettings: [
                 .headerSearchPath("Dependencies/DSP"),
